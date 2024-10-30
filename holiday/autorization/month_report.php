@@ -25,12 +25,12 @@
  */
 
 // Load Dolibarr environment
-require '../main.inc.php';
-require_once DOL_DOCUMENT_ROOT.'/holiday/class/holiday.class.php';
-require_once DOL_DOCUMENT_ROOT.'/user/class/user.class.php';
-require_once DOL_DOCUMENT_ROOT.'/core/lib/files.lib.php';
-require_once DOL_DOCUMENT_ROOT.'/core/lib/date.lib.php';
-require_once DOL_DOCUMENT_ROOT.'/core/class/html.formother.class.php';
+require '../../main.inc.php';
+require_once DOL_DOCUMENT_ROOT.'../holiday/class/holiday.class.php';
+require_once DOL_DOCUMENT_ROOT.'../user/class/user.class.php';
+require_once DOL_DOCUMENT_ROOT.'../core/lib/files.lib.php';
+require_once DOL_DOCUMENT_ROOT.'../core/lib/date.lib.php';
+require_once DOL_DOCUMENT_ROOT.'../core/class/html.formother.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('holiday', 'hrm'));

@@ -30,17 +30,17 @@
  */
 
 // Load Dolibarr environment
-require '../main.inc.php';
-require_once DOL_DOCUMENT_ROOT.'/core/class/html.form.class.php';
-require_once DOL_DOCUMENT_ROOT.'/user/class/usergroup.class.php';
-require_once DOL_DOCUMENT_ROOT.'/core/class/html.formfile.class.php';
-require_once DOL_DOCUMENT_ROOT.'/core/class/CMailFile.class.php';
-require_once DOL_DOCUMENT_ROOT.'/core/class/html.formmail.class.php';
-require_once DOL_DOCUMENT_ROOT.'/core/class/doleditor.class.php';
-require_once DOL_DOCUMENT_ROOT.'/core/lib/date.lib.php';
-require_once DOL_DOCUMENT_ROOT.'/core/lib/holiday.lib.php';
-require_once DOL_DOCUMENT_ROOT.'/holiday/class/holiday.class.php';
-require_once DOL_DOCUMENT_ROOT.'/core/class/extrafields.class.php';
+require '../../main.inc.php';
+require_once DOL_DOCUMENT_ROOT.'../core/class/html.form.class.php';
+require_once DOL_DOCUMENT_ROOT.'../user/class/usergroup.class.php';
+require_once DOL_DOCUMENT_ROOT.'../core/class/html.formfile.class.php';
+require_once DOL_DOCUMENT_ROOT.'../core/class/CMailFile.class.php';
+require_once DOL_DOCUMENT_ROOT.'../core/class/html.formmail.class.php';
+require_once DOL_DOCUMENT_ROOT.'../core/class/doleditor.class.php';
+require_once DOL_DOCUMENT_ROOT.'../core/lib/date.lib.php';
+require_once DOL_DOCUMENT_ROOT.'../core/lib/holiday.lib.php';
+require_once DOL_DOCUMENT_ROOT.'../holiday/class/holiday.class.php';
+require_once DOL_DOCUMENT_ROOT.'../core/class/extrafields.class.php';
 
 // Get parameters
 $action 		= GETPOST('action', 'aZ09');

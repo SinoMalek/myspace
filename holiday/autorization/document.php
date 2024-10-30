@@ -29,13 +29,13 @@
  */
 
 // Load Dolibarr environment
-require '../main.inc.php';
-require_once DOL_DOCUMENT_ROOT.'/holiday/class/holiday.class.php';
-require_once DOL_DOCUMENT_ROOT.'/core/lib/files.lib.php';
-require_once DOL_DOCUMENT_ROOT.'/core/lib/images.lib.php';
-require_once DOL_DOCUMENT_ROOT.'/core/lib/date.lib.php';
-require_once DOL_DOCUMENT_ROOT.'/core/lib/holiday.lib.php';
-require_once DOL_DOCUMENT_ROOT.'/core/class/html.formfile.class.php';
+require '../../main.inc.php';
+require_once DOL_DOCUMENT_ROOT.'../holiday/class/holiday.class.php';
+require_once DOL_DOCUMENT_ROOT.'../core/lib/files.lib.php';
+require_once DOL_DOCUMENT_ROOT.'../core/lib/images.lib.php';
+require_once DOL_DOCUMENT_ROOT.'../core/lib/date.lib.php';
+require_once DOL_DOCUMENT_ROOT.'../core/lib/holiday.lib.php';
+require_once DOL_DOCUMENT_ROOT.'../core/class/html.formfile.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('other', 'holiday', 'companies'));

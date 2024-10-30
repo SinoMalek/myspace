@@ -26,16 +26,16 @@
  */
 
 // Load Dolibarr environment
-require '../main.inc.php';
-require_once DOL_DOCUMENT_ROOT.'/core/class/html.form.class.php';
-require_once DOL_DOCUMENT_ROOT.'/core/class/html.formother.class.php';
-require_once DOL_DOCUMENT_ROOT.'/core/class/html.formfile.class.php';
-require_once DOL_DOCUMENT_ROOT.'/core/lib/date.lib.php';
-require_once DOL_DOCUMENT_ROOT.'/user/class/user.class.php';
-require_once DOL_DOCUMENT_ROOT.'/user/class/usergroup.class.php';
-require_once DOL_DOCUMENT_ROOT.'/holiday/class/holiday.class.php';
-require_once DOL_DOCUMENT_ROOT.'/core/lib/functions2.lib.php';
-require_once DOL_DOCUMENT_ROOT.'/core/lib/usergroups.lib.php';
+require '../../main.inc.php';
+require_once DOL_DOCUMENT_ROOT.'../core/class/html.form.class.php';
+require_once DOL_DOCUMENT_ROOT.'../core/class/html.formother.class.php';
+require_once DOL_DOCUMENT_ROOT.'../core/class/html.formfile.class.php';
+require_once DOL_DOCUMENT_ROOT.'../core/lib/date.lib.php';
+require_once DOL_DOCUMENT_ROOT.'../user/class/user.class.php';
+require_once DOL_DOCUMENT_ROOT.'../user/class/usergroup.class.php';
+require_once DOL_DOCUMENT_ROOT.'../holiday/class/holiday.class.php';
+require_once DOL_DOCUMENT_ROOT.'../core/lib/functions2.lib.php';
+require_once DOL_DOCUMENT_ROOT.'../core/lib/usergroups.lib.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('users', 'other', 'holiday', 'hrm'));
@@ -517,9 +517,9 @@ if ($resql) {
 
 		print '</div>';
 	} else {
-		$title = $langs->trans("ListeCP");
+		$title = $langs->trans("ListeAT");
 
-		$newcardbutton = dolGetButtonTitle($langs->trans('MenuAddCP'), '', 'fa fa-plus-circle', DOL_URL_ROOT.'/holiday/card.php?action=create', '', $user->rights->holiday->write);
+		$newcardbutton = dolGetButtonTitle($langs->trans('MenuAddAT'), '', 'fa fa-plus-circle', DOL_URL_ROOT.'/holiday/card.php?action=create', '', $user->rights->holiday->write);
 
 		print_barre_liste($title, $page, $_SERVER["PHP_SELF"], $param, $sortfield, $sortorder, $massactionbutton, $num, $nbtotalofrecords, 'title_hrm', 0, $newcardbutton, '', $limit, 0, 0, 1);
 	}

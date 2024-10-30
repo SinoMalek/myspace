@@ -30,17 +30,17 @@
  */
 
 // Load Dolibarr environment
-require '../main.inc.php';
-require_once DOL_DOCUMENT_ROOT.'/core/class/html.form.class.php';
-require_once DOL_DOCUMENT_ROOT.'/user/class/usergroup.class.php';
-require_once DOL_DOCUMENT_ROOT.'/core/class/html.formfile.class.php';
-require_once DOL_DOCUMENT_ROOT.'/core/class/CMailFile.class.php';
-require_once DOL_DOCUMENT_ROOT.'/core/class/html.formmail.class.php';
-require_once DOL_DOCUMENT_ROOT.'/core/class/doleditor.class.php';
-require_once DOL_DOCUMENT_ROOT.'/core/lib/date.lib.php';
-require_once DOL_DOCUMENT_ROOT.'/core/lib/holiday.lib.php';
-require_once DOL_DOCUMENT_ROOT.'/holiday/class/holiday.class.php';
-require_once DOL_DOCUMENT_ROOT.'/core/class/extrafields.class.php';
+require '../../main.inc.php';
+require_once DOL_DOCUMENT_ROOT.'../core/class/html.form.class.php';
+require_once DOL_DOCUMENT_ROOT.'../user/class/usergroup.class.php';
+require_once DOL_DOCUMENT_ROOT.'../core/class/html.formfile.class.php';
+require_once DOL_DOCUMENT_ROOT.'../core/class/CMailFile.class.php';
+require_once DOL_DOCUMENT_ROOT.'../core/class/html.formmail.class.php';
+require_once DOL_DOCUMENT_ROOT.'../core/class/doleditor.class.php';
+require_once DOL_DOCUMENT_ROOT.'../core/lib/date.lib.php';
+require_once DOL_DOCUMENT_ROOT.'../core/lib/holiday.lib.php';
+require_once DOL_DOCUMENT_ROOT.'../holiday/class/holiday.class.php';
+require_once DOL_DOCUMENT_ROOT.'../core/class/extrafields.class.php';
 
 // Get parameters
 $action = GETPOST('action', 'aZ09');
@@ -931,7 +931,7 @@ if ((empty($id) && empty($ref)) || $action == 'create' || $action == 'add') {
 		$errors[] = $langs->trans('CantCreateCP');
 	} else {
 		// Form to add a leave request
-		print load_fiche_titre($langs->trans('MenuAddCP'), '', 'title_hrm.png');
+		print load_fiche_titre($langs->trans('MenuAddAT'), '', 'title_hrm.png');
 
 		// Error management
 		if (GETPOST('error')) {
@@ -1003,28 +1003,28 @@ if ((empty($id) && empty($ref)) || $action == 'create' || $action == 'add') {
 		print '<input type="hidden" name="token" value="'.newToken().'" />'."\n";
 		print '<input type="hidden" name="action" value="add" />'."\n";
 
-		if (empty($conf->global->HOLIDAY_HIDE_BALANCE)) {
-			print dol_get_fiche_head('', '', '', -1);
-
-			$out = '';
-			$nb_holiday = 0;
-			$typeleaves = $object->getTypes(1, 1);
-			foreach ($typeleaves as $key => $val) {
-				$nb_type = $object->getCPforUser($user->id, $val['rowid']);
-				$nb_holiday += $nb_type;
-
-				$out .= ' - '.($langs->trans($val['code']) != $val['code'] ? $langs->trans($val['code']) : $val['label']).': <strong>'.($nb_type ? price2num($nb_type) : 0).'</strong><br>';
-				//$out .= ' - '.$val['label'].': <strong>'.($nb_type ?price2num($nb_type) : 0).'</strong><br>';
-			}
-			print $langs->trans('SoldeCPUser', round($nb_holiday, 5)).'<br>';
-			print $out;
-
-			print dol_get_fiche_end();
-		} elseif (!is_numeric($conf->global->HOLIDAY_HIDE_BALANCE)) {
-			print $langs->trans($conf->global->HOLIDAY_HIDE_BALANCE).'<br>';
-		}
-
-		print dol_get_fiche_head();
+//		if (empty($conf->global->HOLIDAY_HIDE_BALANCE)) {
+//			print dol_get_fiche_head('', '', '', -1);
+//
+//			$out = '';
+//			$nb_holiday = 0;
+//			$typeleaves = $object->getTypes(1, 1);
+//			foreach ($typeleaves as $key => $val) {
+//				$nb_type = $object->getCPforUser($user->id, $val['rowid']);
+//				$nb_holiday += $nb_type;
+//
+//				$out .= ' - '.($langs->trans($val['code']) != $val['code'] ? $langs->trans($val['code']) : $val['label']).': <strong>'.($nb_type ? price2num($nb_type) : 0).'</strong><br>';
+//				//$out .= ' - '.$val['label'].': <strong>'.($nb_type ?price2num($nb_type) : 0).'</strong><br>';
+//			}
+//			print $langs->trans('SoldeCPUser', round($nb_holiday, 5)).'<br>';
+//			print $out;
+//
+//			print dol_get_fiche_end();
+//		} elseif (!is_numeric($conf->global->HOLIDAY_HIDE_BALANCE)) {
+//			print $langs->trans($conf->global->HOLIDAY_HIDE_BALANCE).'<br>';
+//		}
+//
+//		print dol_get_fiche_head();
 
 		//print '<span>'.$langs->trans('DelayToRequestCP',$object->getConfCP('delayForRequest')).'</span><br><br>';
 
@@ -1140,7 +1140,7 @@ if ((empty($id) && empty($ref)) || $action == 'create' || $action == 'add') {
 
 		print dol_get_fiche_end();
 
-		print $form->buttonsSaveCancel("SendRequestCP");
+		print $form->buttonsSaveCancel("SendRequestAT");
 
 		print '</from>'."\n";
 	}
@@ -1235,7 +1235,6 @@ if ((empty($id) && empty($ref)) || $action == 'create' || $action == 'add') {
 				print '</td></tr>';
 
 				// Type
-				print '<tr>';
 				print '<td>'.$langs->trans("Type").'</td>';
 				print '<td>';
 				$typeleaves = $object->getTypes(1, -1);

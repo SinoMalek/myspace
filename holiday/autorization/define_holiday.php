@@ -27,9 +27,9 @@
  */
 
 // Load Dolibarr environment
-require '../main.inc.php';
-require_once DOL_DOCUMENT_ROOT.'/user/class/user.class.php';
-require_once DOL_DOCUMENT_ROOT.'/holiday/class/holiday.class.php';
+require '../../main.inc.php';
+require_once DOL_DOCUMENT_ROOT.'../user/class/user.class.php';
+require_once DOL_DOCUMENT_ROOT.'../holiday/class/holiday.class.php';
 
 // Load translation files required by the page
 $langs->loadlangs(array('users', 'other', 'holiday', 'hrm'));
