@@ -1049,11 +1049,12 @@ if ((empty($id) && empty($ref)) || $action == 'create' || $action == 'add') {
 		print '<td>';
 		$typeleaves = $object->getTypes(1, -1);
 		$arraytypeleaves = array();
-		foreach ($typeleaves as $key => $val) {
-			$labeltoshow = ($langs->trans($val['code']) != $val['code'] ? $langs->trans($val['code']) : $val['label']);
-			$labeltoshow .= ($val['delay'] > 0 ? ' ('.$langs->trans("NoticePeriod").': '.$val['delay'].' '.$langs->trans("days").')' : '');
-			$arraytypeleaves[$val['rowid']] = $labeltoshow;
-		}
+        foreach ($typeleaves as $key => $val) {
+            if ($val['code'] === 'AT') continue; // Exclude code 'AT'
+            $labeltoshow = ($langs->trans($val['code']) != $val['code'] ? $langs->trans($val['code']) : $val['label']);
+            $labeltoshow .= ($val['delay'] > 0 ? ' ('.$langs->trans("NoticePeriod").': '.$val['delay'].' '.$langs->trans("days").')' : '');
+            $arraytypeleaves[$val['rowid']] = $labeltoshow;
+        }
 		print $form->selectarray('type', $arraytypeleaves, (GETPOST('type', 'alpha') ?GETPOST('type', 'alpha') : ''), 1, 0, 0, '', 0, 0, 0, '', '', true);
 		if ($user->admin) {
 			print info_admin($langs->trans("YouCanChangeValuesForThisListFromDictionarySetup"), 1);

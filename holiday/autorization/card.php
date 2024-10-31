@@ -1110,8 +1110,7 @@ if ((empty($id) && empty($ref)) || $action == 'create' || $action == 'add') {
 			print $form->selectDate($tmpdate, 'date_debut_', 0, 0, 0, '', 1, 1);
 		}
 		print ' &nbsp; &nbsp; ';
-        print '<input type="time" name="hdat" id="hdat" min="09:00" max="18:00" value="'.(GETPOST('hdat') ? GETPOST('hdat', 'alpha') : '').'" required>';
-        print '</td>';
+        print '<input type="time" name="hdat" id="hdat" min="09:00" max="18:00" value="'.(GETPOST('hdat') ? GETPOST('hdat', 'alpha') : '00:00').'" required>';        print '</td>';
         print '</tr>';
 
         // Commented since we'll be working with hours field just above
@@ -1284,20 +1283,34 @@ if ((empty($id) && empty($ref)) || $action == 'create' || $action == 'add') {
 				print '</td>';
 				print '</tr>';
 
-				$starthalfday = ($object->halfday == -1 || $object->halfday == 2) ? 'afternoon' : 'morning';
-				$endhalfday = ($object->halfday == 1 || $object->halfday == 2) ? 'morning' : 'afternoon';
+				//$starthalfday = ($object->halfday == -1 || $object->halfday == 2) ? 'afternoon' : 'morning';
+				//$endhalfday = ($object->halfday == 1 || $object->halfday == 2) ? 'morning' : 'afternoon';
 
-				if (!$edit) {
-					print '<tr>';
-					print '<td class="nowrap">';
-					print $form->textwithpicto($langs->trans('DateDebCP'), $langs->trans("FirstDayOfHoliday"));
-					print '</td>';
-					print '<td>'.dol_print_date($object->date_debut, 'day');
-					print ' &nbsp; &nbsp; ';
-					print '<span class="opacitymedium">'.$langs->trans($listhalfday[$starthalfday]).'</span>';
-					print '</td>';
-					print '</tr>';
-				} else {
+                // Date start & hours
+                if (!$edit) {
+                    // Display the Start Date
+                    print '<tr>';
+                    print '<td class="nowrap">';
+                    print $form->textwithpicto($langs->trans('DateDebCP'), $langs->trans("FirstDayOfHoliday"));
+                    print '</td>';
+                    print '<td>';
+                    print dol_print_date($object->date_debut, 'day');
+                    print '</td>';
+                    print '</tr>';
+
+                    // Display the Start Hour (HOURSOFDISCHARGE) on a new line
+                    if (!empty($object->hdat)) {
+                        print '<tr>';
+                        print '<td class="nowrap">';
+                        print $langs->trans('Heure debut');
+                        print '</td>';
+                        print '<td>';
+                        print dol_escape_htmltag($object->hdat);
+                        print '</td>';
+                        print '</tr>';
+                    }
+
+                } else {
 					print '<tr>';
 					print '<td class="nowrap">';
 					print $form->textwithpicto($langs->trans('DateDebCP'), $langs->trans("FirstDayOfHoliday"));
