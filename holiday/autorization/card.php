@@ -171,7 +171,9 @@ if (empty($reshook)) {
 			$starthalfday = GETPOST('starthalfday');
 			$endhalfday = GETPOST('endhalfday');
 			$type = GETPOST('type');
-			$halfday = 0;
+            $hdat = GETPOST('hdat', 'alpha'); // Use 'alpha' or appropriate filter
+
+            $halfday = 0;
 			if ($starthalfday == 'afternoon' && $endhalfday == 'morning') {
 				$halfday = 2;
 			} elseif ($starthalfday == 'afternoon') {
@@ -279,6 +281,7 @@ if (empty($reshook)) {
 				$object->date_debut = $date_debut;
 				$object->date_fin = $date_fin;
 				$object->halfday = $halfday;
+                $object->hdat = $hdat;
 
 				$result = $object->create($user);
 				if ($result <= 0) {

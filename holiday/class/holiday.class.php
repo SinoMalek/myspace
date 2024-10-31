@@ -308,7 +308,7 @@ class Holiday extends CommonObject
         $sql .= " '".$this->db->escape($this->hdat)."'"; // Enclosed hdat in quotes and escaped
         $sql .= ")";
 
-        $this->db->begin();
+
 
         dol_syslog(get_class($this)."::create", LOG_DEBUG);
         $resql = $this->db->query($sql);
