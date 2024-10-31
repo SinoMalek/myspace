@@ -70,10 +70,6 @@ class Holiday extends CommonObject
 	 * @var string description
 	 */
 	public $description;
-    /**
-     * @var string start time (mainly used in Discharge)
-     */
-    public $hdat;
 
 	public $date_debut = ''; // Date start in PHP server TZ
 	public $date_fin = ''; // Date end in PHP server TZ
@@ -259,62 +255,60 @@ class Holiday extends CommonObject
 	 *   @param     int		$notrigger	    0=launch triggers after, 1=disable triggers
 	 *   @return    int			         	<0 if KO, Id of created object if OK
 	 */
-    public function create($user, $notrigger = 0)
-    {
-        global $conf;
-        $error = 0;
+	public function create($user, $notrigger = 0)
+	{
+		global $conf;
+		$error = 0;
 
-        $now = dol_now();
+		$now = dol_now();
 
-        // Check parameters
-        if (empty($this->fk_user) || !is_numeric($this->fk_user) || $this->fk_user < 0) {
-            $this->error = "ErrorBadParameterFkUser"; return -1;
-        }
-        if (empty($this->fk_validator) || !is_numeric($this->fk_validator) || $this->fk_validator < 0) {
-            $this->error = "ErrorBadParameterFkValidator"; return -1;
-        }
-        if (empty($this->fk_type) || !is_numeric($this->fk_type) || $this->fk_type < 0) {
-            $this->error = "ErrorBadParameterFkType"; return -1;
-        }
+		// Check parameters
+		if (empty($this->fk_user) || !is_numeric($this->fk_user) || $this->fk_user < 0) {
+			$this->error = "ErrorBadParameterFkUser"; return -1;
+		}
+		if (empty($this->fk_validator) || !is_numeric($this->fk_validator) || $this->fk_validator < 0) {
+			$this->error = "ErrorBadParameterFkValidator"; return -1;
+		}
+		if (empty($this->fk_type) || !is_numeric($this->fk_type) || $this->fk_type < 0) {
+			$this->error = "ErrorBadParameterFkType"; return -1;
+		}
 
-        // Insert request
-        $sql = "INSERT INTO ".MAIN_DB_PREFIX."holiday(";
-        $sql .= "ref,";
-        $sql .= "fk_user,";
-        $sql .= "date_create,";
-        $sql .= "description,";
-        $sql .= "date_debut,";
-        $sql .= "date_fin,";
-        $sql .= "halfday,";
-        $sql .= "statut,";
-        $sql .= "fk_validator,";
-        $sql .= "fk_type,";
-        $sql .= "fk_user_create,";
-        $sql .= "entity,";
-        $sql .= "hdat";
-        $sql .= ") VALUES (";
-        $sql .= "'(PROV)',";
-        $sql .= " ".((int) $this->fk_user).",";
-        $sql .= " '".$this->db->idate($now)."',";
-        $sql .= " '".$this->db->escape($this->description)."',";
-        $sql .= " '".$this->db->idate($this->date_debut)."',";
-        $sql .= " '".$this->db->idate($this->date_fin)."',";
-        $sql .= " ".((int) $this->halfday).",";
-        $sql .= " '1',";
-        $sql .= " ".((int) $this->fk_validator).",";
-        $sql .= " ".((int) $this->fk_type).",";
-        $sql .= " ".((int) $user->id).",";
-        $sql .= " ".((int) $conf->entity).","; // Added comma here
-        $sql .= " '".$this->db->escape($this->hdat)."'"; // Enclosed hdat in quotes and escaped
-        $sql .= ")";
+		// Insert request
+		$sql = "INSERT INTO ".MAIN_DB_PREFIX."holiday(";
+		$sql .= "ref,";
+		$sql .= "fk_user,";
+		$sql .= "date_create,";
+		$sql .= "description,";
+		$sql .= "date_debut,";
+		$sql .= "date_fin,";
+		$sql .= "halfday,";
+		$sql .= "statut,";
+		$sql .= "fk_validator,";
+		$sql .= "fk_type,";
+		$sql .= "fk_user_create,";
+		$sql .= "entity";
+		$sql .= ") VALUES (";
+		$sql .= "'(PROV)',";
+		$sql .= " ".((int) $this->fk_user).",";
+		$sql .= " '".$this->db->idate($now)."',";
+		$sql .= " '".$this->db->escape($this->description)."',";
+		$sql .= " '".$this->db->idate($this->date_debut)."',";
+		$sql .= " '".$this->db->idate($this->date_fin)."',";
+		$sql .= " ".((int) $this->halfday).",";
+		$sql .= " '1',";
+		$sql .= " ".((int) $this->fk_validator).",";
+		$sql .= " ".((int) $this->fk_type).",";
+		$sql .= " ".((int) $user->id).",";
+		$sql .= " ".((int) $conf->entity);
+		$sql .= ")";
 
-        $this->db->begin();
+		$this->db->begin();
 
-        dol_syslog(get_class($this)."::create", LOG_DEBUG);
-        $resql = $this->db->query($sql);
-        if (!$resql) {
-            $error++; $this->errors[] = "Error ".$this->db->lasterror();
-        }
+		dol_syslog(get_class($this)."::create", LOG_DEBUG);
+		$resql = $this->db->query($sql);
+		if (!$resql) {
+			$error++; $this->errors[] = "Error ".$this->db->lasterror();
+		}
 
 		if (!$error) {
 			$this->id = $this->db->last_insert_id(MAIN_DB_PREFIX."holiday");
@@ -399,8 +393,7 @@ class Holiday extends CommonObject
 		$sql .= " cp.note_public,";
 		$sql .= " cp.fk_user_create,";
 		$sql .= " cp.fk_type,";
-		$sql .= " cp.entity,";
-        $sql .= "cp.hdat";
+		$sql .= " cp.entity";
 		$sql .= " FROM ".MAIN_DB_PREFIX."holiday as cp";
 		if ($id > 0) {
 			$sql .= " WHERE cp.rowid = ".((int) $id);
@@ -442,7 +435,6 @@ class Holiday extends CommonObject
 				$this->fk_type = $obj->fk_type;
 				$this->entity = $obj->entity;
 
-                $this->hdat = $obj->hdat;
 				$this->fetch_optionals();
 
 				$result = 1;
@@ -623,7 +615,6 @@ class Holiday extends CommonObject
 		$sql .= " cp.fk_user_cancel,";
 		$sql .= " cp.detail_refuse,";
 
-        $sql.= "cp.hdat,";
 		$sql .= " uu.lastname as user_lastname,";
 		$sql .= " uu.firstname as user_firstname,";
 		$sql .= " uu.login as user_login,";
@@ -693,9 +684,6 @@ class Holiday extends CommonObject
 				$tab_result[$i]['date_cancel'] = $obj->date_cancel;
 				$tab_result[$i]['fk_user_cancel'] = $obj->fk_user_cancel;
 				$tab_result[$i]['detail_refuse'] = $obj->detail_refuse;
-                // extra field
-				$tab_result[$i]['hdat'] = $obj->hdat;
-
 
 				$tab_result[$i]['user_firstname'] = $obj->user_firstname;
 				$tab_result[$i]['user_lastname'] = $obj->user_lastname;
@@ -753,32 +741,25 @@ public function getTypesById($typeId) {
 	 
 	 
 	 
-	public function nb_days_requestedtot($start_date, $end_date,$halfday) {
-		$start = $start_date;
-		$end = $end_date;
-		$count = 0;
-		dol_syslog("---------------------------halfdaaaay " . $halfday, LOG_DEBUG);
+public function nb_days_requestedtot($start_date, $end_date) {
+    $start = $start_date;
+    $end = $end_date;
+    $count = 0;
 
-		while ($start <= $end) {
-			// Ajouter un log pour chaque itération
-			dol_syslog("-----------------------Processing date: " . date("Y-m-d", $start), LOG_DEBUG);
+    while ($start <= $end) {
+        // Ajouter un log pour chaque itération
+        dol_syslog("-----------------------Processing date: " . date("Y-m-d", $start), LOG_DEBUG);
 
-			
-				$count++; // Ajoutez 1 pour chaque journée complète
-			
-			$start = strtotime("+1 day", $start);
-		}
+        $count++;
+        $start = strtotime("+1 day", $start);
+    }
 
-		// Ajouter un log pour le résultat final
-		dol_syslog("---------------------------Total number of days: " . $count, LOG_DEBUG);
-	 if ($halfday <> '0') {
-				$count = $count-0.5; // Ajoutez 0.5 pour chaque demi-journée
-				dol_syslog("---------------------------Total number of days demis: " . $count, LOG_DEBUG);
-	 }
+    // Ajouter un log pour le résultat final
+    dol_syslog("---------------------------Total number of days: " . $count, LOG_DEBUG);
 
+    return $count;
+}
 
-		return $count;
-	}
 	 
 	 
 	 /////khalil 
@@ -786,7 +767,6 @@ public function getTypesById($typeId) {
 public function getTotalHollyDaysCount($start_date, $end_date) {
     $start = $start_date;
     $end = $end_date;
-	
     $count = 0;
 
     while ($start <= $end) {
@@ -820,6 +800,7 @@ public function getTotalHollyDaysCount($start_date, $end_date) {
     return $count;
 }
 
+
 	 
 	 
 	public function validate($user = null, $notrigger = 0)
@@ -834,13 +815,12 @@ public function getTotalHollyDaysCount($start_date, $end_date) {
     // Obtenir les dates de début et de fin de la demande de congé
     $start_date = $this->date_debut_gmt;
     $end_date = $this->date_fin_gmt;
-	$halfday=$this->halfday;
 
     // Calculer le nombre de jours entre la date de début et la date de fin
 	
 	
 	
-    $nb_days_requested =$this->nb_days_requestedtot($start_date, $end_date,$halfday)- ($this->getTotalHollyDaysCount($start_date, $end_date,$halfday) );
+    $nb_days_requested =$this->nb_days_requestedtot($start_date, $end_date)- ($this->getTotalHollyDaysCount($start_date, $end_date) );
 
     // Vérifier si le solde futur sera négatif
     $balance = $this->getCPforUser($this->fk_user, $this->fk_type);
@@ -852,7 +832,7 @@ public function getTotalHollyDaysCount($start_date, $end_date) {
 
     if ($checkBalance > 0) {
         if ($future_balance < 0) {
-            $this->error = '	';
+            $this->error = 'LeaveRequestCreationBlockedBecauseBalancewillbeNegative';
             dol_syslog("-----------Leave request blocked. Future balance is negative.", LOG_DEBUG);
             return -1;
         } else {
@@ -972,14 +952,12 @@ public function getTotalHollyDaysCount($start_date, $end_date) {
     // Obtenir les dates de début et de fin de la demande de congé
     $start_date = $this->date_debut_gmt;
     $end_date = $this->date_fin_gmt;
-	$halfday=$this->halfday;
-    dol_syslog("------------Validation halfday: ".$halfday, LOG_DEBUG);
 
     // Calculer le nombre de jours entre la date de début et la date de fin
 	
 	
 	
-    $nb_days_requested =$this->nb_days_requestedtot($start_date, $end_date,$halfday)- ($this->getTotalHollyDaysCount($start_date, $end_date));
+    $nb_days_requested =$this->nb_days_requestedtot($start_date, $end_date)- ($this->getTotalHollyDaysCount($start_date, $end_date));
 
     // Vérifier si le solde futur sera négatif
     $balance = $this->getCPforUser($this->fk_user, $this->fk_type);

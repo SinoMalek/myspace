@@ -54,7 +54,6 @@ $socid = GETPOST('socid', 'int');
 
 // Load translation files required by the page
 $langs->loadLangs(array("other", "holiday", "mails", "trips"));
-
 $error = 0;
 
 $now = dol_now();

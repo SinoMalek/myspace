@@ -224,8 +224,9 @@ $arrayofmassactions = array(
 if ($user->hasRight("holiday", "approve")) {
 	$arrayofmassactions['preincreaseholiday'] = img_picto('', 'add', 'class="pictofixedwidth"').$langs->trans("IncreaseHolidays");
 }
+if ($user->rights->holiday->all_holiday) {
 $massactionbutton = $form->selectMassAction('', $arrayofmassactions);
-
+}
 
 print '<form method="POST" id="searchFormList" action="'.$_SERVER["PHP_SELF"].'">';
 if ($optioncss != '') {

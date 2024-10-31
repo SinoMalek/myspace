@@ -54,7 +54,6 @@ $socid = GETPOST('socid', 'int');
 
 // Load translation files required by the page
 $langs->loadLangs(array("other", "holiday", "mails", "trips"));
-
 $error = 0;
 
 $now = dol_now();
@@ -220,7 +219,10 @@ if (empty($reshook)) {
 				$error++;
 				$action = 'create';
 			}
+
+            // Commented since there will be no data validation
 			// If no end date
+             /*
 			if (empty($date_fin)) {
 				setEventMessages($langs->trans("NoDateFin"), null, 'errors');
 				$error++;
@@ -232,7 +234,7 @@ if (empty($reshook)) {
 				$error++;
 				$action = 'create';
 			}
-
+            */
 			// Check if there is already holiday for this period
 			$verifCP = $object->verifDateHolidayCP($fuserid, $date_debut, $date_fin, $halfday);
 			if (!$verifCP) {
@@ -1003,28 +1005,30 @@ if ((empty($id) && empty($ref)) || $action == 'create' || $action == 'add') {
 		print '<input type="hidden" name="token" value="'.newToken().'" />'."\n";
 		print '<input type="hidden" name="action" value="add" />'."\n";
 
-//		if (empty($conf->global->HOLIDAY_HIDE_BALANCE)) {
-//			print dol_get_fiche_head('', '', '', -1);
-//
-//			$out = '';
-//			$nb_holiday = 0;
-//			$typeleaves = $object->getTypes(1, 1);
-//			foreach ($typeleaves as $key => $val) {
-//				$nb_type = $object->getCPforUser($user->id, $val['rowid']);
-//				$nb_holiday += $nb_type;
-//
-//				$out .= ' - '.($langs->trans($val['code']) != $val['code'] ? $langs->trans($val['code']) : $val['label']).': <strong>'.($nb_type ? price2num($nb_type) : 0).'</strong><br>';
-//				//$out .= ' - '.$val['label'].': <strong>'.($nb_type ?price2num($nb_type) : 0).'</strong><br>';
-//			}
-//			print $langs->trans('SoldeCPUser', round($nb_holiday, 5)).'<br>';
-//			print $out;
-//
-//			print dol_get_fiche_end();
-//		} elseif (!is_numeric($conf->global->HOLIDAY_HIDE_BALANCE)) {
-//			print $langs->trans($conf->global->HOLIDAY_HIDE_BALANCE).'<br>';
-//		}
-//
-//		print dol_get_fiche_head();
+        //Responsible for displaying alance
+        /*
+		if (empty($conf->global->HOLIDAY_HIDE_BALANCE)) {
+			print dol_get_fiche_head('', '', '', -1);
+
+			$out = '';
+			$nb_holiday = 0;
+			$typeleaves = $object->getTypes(1, 1);
+			foreach ($typeleaves as $key => $val) {
+				$nb_type = $object->getCPforUser($user->id, $val['rowid']);
+				$nb_holiday += $nb_type;
+
+				$out .= ' - '.($langs->trans($val['code']) != $val['code'] ? $langs->trans($val['code']) : $val['label']).': <strong>'.($nb_type ? price2num($nb_type) : 0).'</strong><br>';
+				//$out .= ' - '.$val['label'].': <strong>'.($nb_type ?price2num($nb_type) : 0).'</strong><br>';
+			}
+			print $langs->trans('SoldeCPUser', round($nb_holiday, 5)).'<br>';
+			print $out;
+
+			print dol_get_fiche_end();
+		} elseif (!is_numeric($conf->global->HOLIDAY_HIDE_BALANCE)) {
+			print $langs->trans($conf->global->HOLIDAY_HIDE_BALANCE).'<br>';
+		}
+        */
+		print dol_get_fiche_head();
 
 		//print '<span>'.$langs->trans('DelayToRequestCP',$object->getConfCP('delayForRequest')).'</span><br><br>';
 
@@ -1045,6 +1049,33 @@ if ((empty($id) && empty($ref)) || $action == 'create' || $action == 'add') {
 		print '</tr>';
 
 		// Type
+
+        // Modified Type
+        print '<tr>';
+        print '<td class="fieldrequired">'.$langs->trans("Type").'</td>';
+        print '<td>';
+        $typeleaves = $object->getTypes(1, -1);
+        $AT_rowid = null;
+        $labeltoshow = '';
+        foreach ($typeleaves as $key => $val) {
+            if ($val['code'] == 'AT') {
+                $AT_rowid = $val['rowid'];
+                $labeltoshow = ($langs->trans($val['code']) != $val['code']) ? $langs->trans($val['code']) : $val['label'];
+                $labeltoshow .= ($val['delay'] > 0) ? ' ('.$langs->trans("NoticePeriod").': '.$val['delay'].' '.$langs->trans("days").')' : '';
+                break;
+            }
+        }
+        if ($AT_rowid) {
+            // Display the label for 'AT' and set a hidden input for 'type'
+            print $labeltoshow;
+            print '<input type="hidden" name="type" value="'.$AT_rowid.'">';
+        } else {
+            print '<span class="error">'.$langs->trans("ErrorTypeNotFound", 'AT').'</span>';
+        }
+        print '</td>';
+        print '</tr>';
+
+        /*
 		print '<tr>';
 		print '<td class="fieldrequired">'.$langs->trans("Type").'</td>';
 		print '<td>';
@@ -1061,7 +1092,7 @@ if ((empty($id) && empty($ref)) || $action == 'create' || $action == 'add') {
 		}
 		print '</td>';
 		print '</tr>';
-
+        */
 		// Date start
 		print '<tr>';
 		print '<td class="fieldrequired">';
@@ -1076,11 +1107,17 @@ if ((empty($id) && empty($ref)) || $action == 'create' || $action == 'add') {
 			print $form->selectDate($tmpdate, 'date_debut_', 0, 0, 0, '', 1, 1);
 		}
 		print ' &nbsp; &nbsp; ';
+        print '<input type="time" name="hdat" id="hdat" min="09:00" max="18:00" value="'.(GETPOST('hdat') ? GETPOST('hdat', 'alpha') : '').'" required>';
+        print '</td>';
+        print '</tr>';
+
+        // Commented since we'll be working with hours field just above
 		print $form->selectarray('starthalfday', $listhalfday, (GETPOST('starthalfday', 'alpha') ?GETPOST('starthalfday', 'alpha') : 'morning'));
 		print '</td>';
 		print '</tr>';
+/*
+		// Date end commented since there will be no need for it
 
-		// Date end
 		print '<tr>';
 		print '<td class="fieldrequired">';
 		print $form->textwithpicto($langs->trans("DateFinCP"), $langs->trans("LastDayOfHoliday"));
@@ -1096,7 +1133,7 @@ if ((empty($id) && empty($ref)) || $action == 'create' || $action == 'add') {
 		print $form->selectarray('endhalfday', $listhalfday, (GETPOST('endhalfday', 'alpha') ?GETPOST('endhalfday', 'alpha') : 'afternoon'));
 		print '</td>';
 		print '</tr>';
-
+*/
 		// Approver
 		print '<tr>';
 		print '<td class="fieldrequired">'.$langs->trans("ReviewedByCP").'</td>';
@@ -1181,9 +1218,9 @@ if ((empty($id) && empty($ref)) || $action == 'create' || $action == 'add') {
 					case 'nodatedebut':
 						$errors[] = $langs->transnoentitiesnoconv('NoDateDebut');
 						break;
-					case 'nodatefin':
-						$errors[] = $langs->transnoentitiesnoconv('NoDateFin');
-						break;
+					//case 'nodatefin':
+					//	$errors[] = $langs->transnoentitiesnoconv('NoDateFin');
+					//	break;
 					case 'DureeHoliday':
 						$errors[] = $langs->transnoentitiesnoconv('ErrorDureeCP');
 						break;
@@ -1235,6 +1272,7 @@ if ((empty($id) && empty($ref)) || $action == 'create' || $action == 'add') {
 				print '</td></tr>';
 
 				// Type
+				print '<tr>';
 				print '<td>'.$langs->trans("Type").'</td>';
 				print '<td>';
 				$typeleaves = $object->getTypes(1, -1);
@@ -1268,7 +1306,8 @@ if ((empty($id) && empty($ref)) || $action == 'create' || $action == 'add') {
 					print '</td>';
 					print '</tr>';
 				}
-
+                /*
+                 * Commented since there will be no need to display date_fin on the details
 				if (!$edit) {
 					print '<tr>';
 					print '<td class="nowrap">';
@@ -1290,9 +1329,12 @@ if ((empty($id) && empty($ref)) || $action == 'create' || $action == 'add') {
 					print $form->selectarray('endhalfday', $listhalfday, (GETPOST('endhalfday') ?GETPOST('endhalfday') : $endhalfday));
 					print '</td>';
 					print '</tr>';
-				}
+				} */
 
 				// Nb of days
+
+                //Commented since we'll note check the balance
+                /*
 				print '<tr>';
 				print '<td>';
 				$htmlhelp = $langs->trans('NbUseDaysCPHelp');
@@ -1309,7 +1351,7 @@ if ((empty($id) && empty($ref)) || $action == 'create' || $action == 'add') {
 				print '<td>';
 				print num_open_day($object->date_debut_gmt, $object->date_fin_gmt, 0, 1, $object->halfday);
 				print '</td>';
-				print '</tr>';
+				print '</tr>';*/
 
 				if ($object->statut == Holiday::STATUS_REFUSED) {
 					print '<tr>';
